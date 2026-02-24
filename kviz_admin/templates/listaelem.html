@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang='hu'>
+<head>
+  <meta charset='utf-8'>
+  <title>Lista elem</title>
+</head>
+<body>
+  <h1>Lista elem hozzáadás</h1>
+  <p><b>Kérdés:</b> {{ kerdes.szoveg }}</p>
+
+  <form method='post' action='/listaelem/add/addrecord/{{ kerdes.id }}'>
+    {% csrf_token %}
+    <p>
+      <label>Elem:</label><br>
+      <input name='elem' size='40' required>
+    </p>
+    <button type='submit'>Mentés</button>
+    <a href='/'>Mégse</a>
+  </form>
+</body>
+</html>

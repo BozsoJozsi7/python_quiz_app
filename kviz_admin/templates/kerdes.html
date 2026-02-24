@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang='hu'>
+<head>
+  <meta charset='utf-8'>
+  <title>Kérdés</title>
+</head>
+<body>
+  <h1>Kérdés {% if mod == 'add' %}hozzáadás{% else %}módosítás{% endif %}</h1>
+
+  <form method='post' action='{% if mod == "add" %}/kerdes/add/addrecord{% else %}/kerdes/update/updaterecord/{{ kerdes.id }}{% endif %}'>
+    {% csrf_token %}
+
+    <p>
+      <label>Típus:</label><br>
+      <select name='tipus' required>
+        {% with t=kerdes.tipus %}
+          <option value='feleletvalasztos' {% if t == 'feleletvalasztos' %}selected{% endif %}>feleletvalasztos</option>
+          <option value='szam' {% if t == 'szam' %}selected{% endif %}>szam</option>
+          <option value='datum' {% if t == 'datum' %}selected{% endif %}>datum</option>
+          <option value='lista' {% if t == 'lista' %}selected{% endif %}>lista</option>
+        {% endwith %}
+      </select>
+    </p>
+
+    <p>
+      <label>Szöveg:</label><br>
+      <textarea name='szoveg' rows='4' cols='60' required>{% if kerdes %}{{ kerdes.szoveg }}{% endif %}</textarea>
+    </p>
+
+    <p>
+      <label>Aktív:</label>
+      <input type='checkbox' name='aktiv'
+        {% if kerdes and kerdes.aktiv %}checked{% elif mod == 'add' %}checked{% endif %}>
+    </p>
+
+    <p>
+      <label>Helyes szám (csak szam típusnál):</label><br>
+      <input name='helyes_szam' type='number' step='any' value='{% if kerdes %}{{ kerdes.helyes_szam }}{% endif %}'>
+    </p>
+
+    <p>
+      <label>Helyes dátum (csak datum típusnál):</label><br>
+      <input name='helyes_datum' type='date' value='{% if kerdes %}{{ kerdes.helyes_datum|date:"Y-m-d" }}{% endif %}'>
+    </p>
+
+    <button type='submit'>Mentés</button>
+    <a href='/'>Mégse</a>
+  </form>
+</body>
+</html>

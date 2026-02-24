@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang='hu'>
+<head>
+  <meta charset='utf-8'>
+  <title>Kvíz admin</title>
+</head>
+<body>
+  <h1>Kvíz admin</h1>
+
+  <p><a href='/kerdes/add/'>+ Új kérdés</a></p>
+
+  <h2>Kérdések</h2>
+
+  <ul>
+    {% for k in kerdesek %}
+      <li>
+        <b>#{{ k.id }}</b> ({{ k.tipus }}) {% if k.aktiv %}✅{% else %}❌{% endif %}
+        <br>
+        {{ k.szoveg }}
+        <br>
+        <a href='/kerdes/update/{{ k.id }}'>Módosít</a> |
+        <a href='/kerdes/delete/{{ k.id }}' onclick='return confirm("Biztos törlöd?")'>Töröl</a>
+
+        {% if k.tipus == 'feleletvalasztos' %}
+          <div style='margin-left:20px;'>
+            <b>Válaszlehetőségek:</b>
+            <a href='/valasz/add/{{ k.id }}'>+ hozzáad</a>
+            <ul>
+              {% for v in valaszok %}
+                {% if v.kerdes.id == k.id %}
+                  <li>
+                    {% if v.helyes %}✅{% else %}◻️{% endif %} {{ v.szoveg }}
+                    (<a href='/valasz/update/{{ v.id }}'>módosít</a>,
+                     <a href='/valasz/delete/{{ v.id }}' onclick='return confirm("Biztos törlöd?")'>töröl</a>)
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {% if k.tipus == 'lista' %}
+          <div style='margin-left:20px;'>
+            <b>Lista elemek:</b>
+            <a href='/listaelem/add/{{ k.id }}'>+ hozzáad</a>
+            <ul>
+              {% for e in lista_elemek %}
+                {% if e.kerdes.id == k.id %}
+                  <li>
+                    {{ e.elem }}
+                    (<a href='/listaelem/delete/{{ e.id }}' onclick='return confirm("Biztos törlöd?")'>töröl</a>)
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+      </li>
+      <hr>
+    {% endfor %}
+  </ul>
+
+</body>
+</html>

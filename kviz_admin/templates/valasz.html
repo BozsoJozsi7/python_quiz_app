@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang='hu'>
+<head>
+  <meta charset='utf-8'>
+  <title>Válaszlehetőség</title>
+</head>
+<body>
+  <h1>Válasz {% if mod == 'add' %}hozzáadás{% else %}módosítás{% endif %}</h1>
+  <p><b>Kérdés:</b> {{ kerdes.szoveg }}</p>
+
+  <form method='post' action='{% if mod == "add" %}/valasz/add/addrecord/{{ kerdes.id }}{% else %}/valasz/update/updaterecord/{{ valasz.id }}{% endif %}'>
+    {% csrf_token %}
+
+    <p>
+      <label>Szöveg:</label><br>
+      <input name='szoveg' value='{% if valasz %}{{ valasz.szoveg }}{% endif %}' size='60' required>
+    </p>
+
+    <p>
+      <label>Helyes:</label>
+      <input type='checkbox' name='helyes' {% if valasz and valasz.helyes %}checked{% endif %}>
+    </p>
+
+    <button type='submit'>Mentés</button>
+    <a href='/'>Mégse</a>
+  </form>
+</body>
+</html>
